@@ -29,7 +29,7 @@ if [ ! -z "$SE_OPTS" ]; then
   echo "appending selenium options: ${SE_OPTS}"
 fi
 
-SEL_HOST=$(wget -qO- http://169.254.169.254/latest/meta-data/local-hostname)
+SEL_HOST=$(wget -qO- http://169.254.169.254/latest/meta-data/local-ipv4)
 
 # TODO: Look into http://www.seleniumhq.org/docs/05_selenium_rc.jsp#browser-side-logs
 
