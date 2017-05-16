@@ -2,8 +2,8 @@
 # NOTE: DO *NOT* EDIT THIS FILE.  IT IS GENERATED.
 # PLEASE UPDATE Dockerfile.txt INSTEAD OF THIS FILE
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-FROM selenium/standalone-chrome:3.0.1-fermium
-MAINTAINER Selenium <selenium-developers@googlegroups.com>
+FROM selenium/standalone-chrome:3.4.0-chromium
+LABEL authors=SeleniumHQ
 
 USER root
 
