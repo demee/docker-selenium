@@ -8,13 +8,16 @@ MAJOR := $(word 1,$(subst ., ,$(VERSION)))
 MINOR := $(word 2,$(subst ., ,$(VERSION)))
 MAJOR_MINOR_PATCH := $(word 1,$(subst -, ,$(VERSION)))
 
-all: hub chrome firefox phantomjs chrome_debug firefox_debug standalone_chrome standalone_firefox standalone_chrome_debug standalone_firefox_debug
+all: hub chrome chrome_ecs firefox firefox_ecs phantomjs chrome_debug firefox_debug standalone_chrome standalone_firefox standalone_chrome_debug standalone_firefox_debug
 
 generate_all:	\
 	generate_hub \
 	generate_nodebase \
+	generate_nodebase_ecs \
 	generate_chrome \
+	generate_chrome_ecs \
 	generate_firefox \
+	generate_firefox_ecs \
 	generate_phantomjs \
 	generate_chrome_debug \
 	generate_firefox_debug \
@@ -39,20 +42,38 @@ hub: base generate_hub
 generate_nodebase:
 	cd ./NodeBase && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS)
 
+generate_nodebase_ecs:
+	cd ./NodeBaseECS && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS)
+
 nodebase: base generate_nodebase
 	cd ./NodeBase && docker build $(BUILD_ARGS) -t $(NAME)/node-base:$(VERSION) .
+
+nodebase_ecs: base generate_nodebase_ecs
+	cd ./NodeBaseECS && docker build $(BUILD_ARGS) -t $(NAME)/node-base-ecs:$(VERSION) .
 
 generate_chrome:
 	cd ./NodeChrome && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS)
 
+generate_chrome_ecs:
+	cd ./NodeChromeECS && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS)
+
 chrome: nodebase generate_chrome
 	cd ./NodeChrome && docker build $(BUILD_ARGS) -t $(NAME)/node-chrome:$(VERSION) .
+
+chrome_ecs: nodebase_ecs generate_chrome_ecs
+	cd ./NodeChromeECS && docker build $(BUILD_ARGS) -t $(NAME)/node-chrome-ecs:$(VERSION) .
 
 generate_firefox:
 	cd ./NodeFirefox && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS)
 
+generate_firefox_ecs:
+	cd ./NodeFirefoxECS && ./generate.sh $(VERSION) $(NAMESPACE) $(AUTHORS)
+
 firefox: nodebase generate_firefox
 	cd ./NodeFirefox && docker build $(BUILD_ARGS) -t $(NAME)/node-firefox:$(VERSION) .
+
+firefox_ecs: nodebase_ecs generate_firefox_ecs
+	cd ./NodeFirefoxECS && docker build $(BUILD_ARGS) -t $(NAME)/node-firefox-ecs:$(VERSION) .
 
 generate_standalone_firefox:
 	cd ./Standalone && ./generate.sh StandaloneFirefox node-firefox Firefox $(VERSION) $(NAMESPACE) $(AUTHORS)
